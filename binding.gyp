@@ -86,6 +86,13 @@
       ],
     },
     {
+      "target_name": "nodeeventloopplugin",
+      "type": "shared_library",
+      "sources": [
+        "<(srcdir)/plugins/node/env/nodeeventloopplugin.cpp",
+      ],
+    },
+    {
       "target_name": "nodeprofplugin",
       "type": "shared_library",
       "sources": [
