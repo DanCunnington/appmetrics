@@ -12,7 +12,14 @@
     "tar": "2.x",
     "request":"2.x"
   },
+  "devDependencies": {
+    "eslint": "^2.x",
+    "eslint-config-strongloop": "^2.x",
+    "mocha": "^2.2.4",
+    "tap": "5.7.x"
+  },
   "scripts": {
+    "pretest": "eslint ./",
     "test": "tap --reporter tap tests/api_tests.js",
     "install": "node-gyp rebuild"
   },
