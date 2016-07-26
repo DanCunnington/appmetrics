@@ -25,69 +25,66 @@ function ExpressProbe() {
 
 util.inherits(ExpressProbe, Probe);
 
-//This method attaches our probe to the instance of the express module (target)
+// This method attaches the probe to the instance of the postgres module (target)
 ExpressProbe.prototype.attach = function(name, target) {
 
   var that = this;
-  if( name != "express" ) return target;
+  if( name != 'express' ) return target;
   if( target.__ddProbeAttached__ ) return target;
   target.__ddProbeAttached__ = true;
-
-  var data = {};
-
+  
   var applicationMethods = ['checkout', 'copy', 'delete', 'get', 'head', 'lock', 'merge', 'mkactivity',
                             'mkcol', 'move', 'm-search', 'notify', 'options', 'patch', 'post', 'purge', 
                             'put', 'report', 'search', 'subscribe', 'trace', 'unlock', 'unsubscribe'];
 
-  //After we call the express constructor
+  // Get the new target after the express constructor has been called
   var newTarget = aspect.afterConstructor(target, {});
-  
-  var newTarget = newTarget.application;
 
-  aspect.before(newTarget, applicationMethods, function(target, methodName, methodArgs, probeData) {
+  // Map the application object to the newTarget
+  newTarget = newTarget.application;
 
-    that.metricsProbeStart(probeData, target, methodName, methodArgs);
-    that.requestProbeStart(probeData, target, methodName, methodArgs);
+  // Ensure we are only attaching the probe to this target once
+  if (!newTarget.__ddProbeAttached__) {
+    newTarget.__ddProbeAttached__ = true;
 
+    // Before we make the call to an applicaton method
+    aspect.before(newTarget, applicationMethods, function(target, methodName, methodArgs, probeData) {
+      
+      // Patch the callback - i.e. the user's function when someone vists an application URL
+      aspect.aroundCallback(methodArgs, probeData, function(target, args, probeData) {
+        that.metricsProbeStart(probeData, methodName, methodArgs);
+        that.requestProbeStart(probeData, methodName, methodArgs);
 
-
-    if (aspect.findCallbackArg(methodArgs) != undefined) {
-     aspect.aroundCallback(methodArgs, probeData, function(target, args, context){
-
-        //Here, the query has executed and returned it's callback. Then
-        //stop monitoring
-        that.metricsProbeEnd(probeData, methodName, methodArgs);
-        that.requestProbeEnd(probeData, methodName, methodArgs);
+      }, function(target, args, probeData, ret) {
+          that.metricsProbeEnd(probeData, methodName, methodArgs);
+          that.requestProbeEnd(probeData, methodName, methodArgs);
       });
-    }
-  });
+    });
+  }
   return target;
 }
 
 /*
- * Lightweight metrics probe for Express queries
+ * Lightweight metrics probe for express queries
  * 
  * These provide:
  *      time:       time event started
- *      route:      the url of the express route 
- *      method:     the HTTP method of the request
+ *      url:        the url visited
+ *      method:     the HTTP method called
  *      duration:   the time for the request to respond
  */
 ExpressProbe.prototype.metricsEnd = function(probeData, methodName, methodArgs) {
   probeData.timer.stop();
-  am.emit('express', {time: probeData.timer.startTimeMillis, route: methodArgs[0], method: methodName, duration: probeData.timer.timeDelta});
+  am.emit('express', {time: probeData.timer.startTimeMillis, url: methodArgs[0], method: methodName, duration: probeData.timer.timeDelta});
 };
 
-/*
- * Heavyweight request probes for Express queries
- */
-ExpressProbe.prototype.requestStart = function (probeData, target, methodName, methodArgs) {
-  var url = methodArgs[0];
+// Heavyweight request probes for express queries 
+ExpressProbe.prototype.requestStart = function (probeData, target, method, methodArgs) {
   probeData.req = request.startRequest( 'HTTP', 'request', false, probeData.timer );
-  probeData.req.setContext({url: url});
+  probeData.req.setContext({url: methodArgs[0]});
 };
 
-ExpressProbe.prototype.requestEnd = function (probeData, methodName, methodArgs) {
+ExpressProbe.prototype.requestEnd = function (probeData, method, methodArgs) {
   probeData.req.stop({url: methodArgs[0]});
 };
 
