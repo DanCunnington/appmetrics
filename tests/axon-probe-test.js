@@ -62,7 +62,7 @@ process.on('exit', function(code) {
 	var sentreceivedpassed = true;
 	for (type in methodpairs) {
 		var methods = methodpairs[type];
-		if( messagecounts[methods.send] != messagecounts[methods.receive] ) {
+		if( messagecounts[methods.send] !== messagecounts[methods.receive] ) {
 			console.log('** Counts for ' + methods.send + " and " + methods.receive + ' did not match, sent '
 					+ messagecounts[methods.send] + ' received '
 					+ messagecounts[methods.receive]);
@@ -86,7 +86,7 @@ process.on('exit', function(code) {
 	for (pair in methodpairs) {
 		for( method in methodpairs[pair] ) {
 			var name = methodpairs[pair][method];
-			if( messagecounts[name] != eventcounts[name] ) {
+			if( messagecounts[name] !== eventcounts[name] ) {
 				console.log('** Counts for ' + name + " calls and " + name + ' events did not match, sent '
 						+ messagecounts[name] + ' received '
 						+ eventcounts[name]);
@@ -133,7 +133,7 @@ messagecounts[methodpairs.pushpull.receive] = 0;
 pullsock.on('message', function(msg) {
 //	console.log('pullsock received: '+ msg);
 	messagecounts[methodpairs.pushpull.receive]++;
-	if( count == TESTCOUNT ) {
+	if( count === TESTCOUNT ) {
 		pullsock.close();
 		pushsock.close();
 	}
@@ -157,7 +157,7 @@ messagecounts[methodpairs.pubsub.receive] = 0;
 subsock.on('message', function(msg) {
 //	console.log('subsock received: '+ msg);
 	messagecounts[methodpairs.pubsub.receive]++;
-	if( count == TESTCOUNT ) {
+	if( count === TESTCOUNT ) {
 		subsock.close();
 		pubsock.close();
 	}
@@ -179,7 +179,7 @@ topicsubsock.subscribe('testtopic1')
 topicsubsock.on('message', function(topic, msg) {
 //	console.log('topicsubsock received: '+ msg);
 	messagecounts[methodpairs.topicpubsub.receive]++;
-	if( count == TESTCOUNT ) {
+	if( count === TESTCOUNT ) {
 		topicsubsock.close();
 		topicpubsock.close();
 	}
@@ -224,7 +224,7 @@ messagecounts[methodpairs.pubemitsubemit.receive] = 0;
 subemitsock.on('testtopic2', function(msg) {
 //	console.log('sub-emitter received: '+ msg +  ' count: ' + count);
 	messagecounts[methodpairs.pubemitsubemit.receive]++;
-	if( count == TESTCOUNT ) {
+	if( count === TESTCOUNT ) {
 		subemitsock.close();
 		pubemitsock.close();
 	}
@@ -243,7 +243,7 @@ messagecounts[methodpairs.pubemitsubemit.send] = 0;
 
 var intervalId = setInterval(function(){
 	count++;
-	if( count == TESTCOUNT ) {
+	if( count === TESTCOUNT ) {
 		clearInterval(intervalId);
 	}
 	pushsock.send('pushpulltest', count);
@@ -264,7 +264,7 @@ var intervalId = setInterval(function(){
 //		console.log("Reply was: " + reply_count);
 		// Close the sockets on this side once we receive the last reply.
 		// (Use the returned count as our count may be 10 before any replies are sent.)
-		if( reply_count == TESTCOUNT ) {
+		if( reply_count === TESTCOUNT ) {
 			repsock.close();
 			reqsock.close();
 		}

@@ -56,7 +56,7 @@ process.on('exit', function(code) {
 	
 	var probesPassed = true;
 	for (method in actualProbeCounts) {
-		if (expectedProbeCounts[method] !== actualProbeCounts[method]) {
+		if (expectedProbeCounts[method] !=== actualProbeCounts[method]) {
 			console.log('** Counts for ' + method + ' did not match, expected '
 					+ expectedProbeCounts[method] + ' actual '
 					+ actualProbeCounts[method]);

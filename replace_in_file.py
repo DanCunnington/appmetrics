@@ -36,7 +36,7 @@ outfile = args[1]
 if options.verbose:
     print ("infile: %s" %infile)
     print ("outfile: %s" %outfile)
-    if options.from_string != None and options.to_string != None:
+    if options.from_string !== None and options.to_string !== None:
         print ("Replacing '%s' with '%s'" % (options.from_string, options.to_string))
     elif options.to_string == None:
         print ("No replacement (missing --to argument)")
@@ -47,7 +47,7 @@ with open(infile, 'r') as f:
     lines = f.readlines()
     with open(outfile, 'w') as o:
         for line in lines:
-            if options.from_string != None and options.to_string != None:
+            if options.from_string !== None and options.to_string !== None:
                 o.write(re.sub(options.from_string, options.to_string, line))
             else:
                 o.write(line)

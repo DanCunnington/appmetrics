@@ -125,7 +125,7 @@ function finishedTesting(queryNumber) {
   //Now check them all
   var finished = true;
   for (var j=0; j<connections.length; j++) {
-    if (connections[j].returned != true) {
+    if (connections[j].returned !== true) {
       finished = false;
       break;
     }

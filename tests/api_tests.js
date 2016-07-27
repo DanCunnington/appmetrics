@@ -27,7 +27,7 @@ tap.tearDown(function(){
 var completedTests = {}; //Stores which tests have been run, ensures single run per test
 
 monitor.on('cpu', function(data) {
-	if (completedTests.cpu != true){
+	if (completedTests.cpu !== true){
 		tap.test("CPU Data", function(t){
 			runCPUTests(data, t);
 			t.end();
@@ -37,7 +37,7 @@ monitor.on('cpu', function(data) {
 });
 
 monitor.on('memory', function(data) {
-	if (completedTests.memory != true){
+	if (completedTests.memory !== true){
 		tap.test("Memory Data", function(t){
 			runMemoryTests(data, t);
 			t.end();
@@ -47,7 +47,7 @@ monitor.on('memory', function(data) {
 });
 
 monitor.on('gc', function(data) {	
-	if (completedTests.gc != true){
+	if (completedTests.gc !== true){
 		tap.test("GC Data", function(t){
 			runGCTests(data, t);
 			t.end();
@@ -60,7 +60,7 @@ monitor.on('gc', function(data) {
 // #### fixed when we move to json objects for the profiling
 // #### data - @tobespc
 //monitor.on('profiling', function(data) {
-//	if (completedTests.profiling != true){
+//	if (completedTests.profiling !== true){
 //		tap.test("Profiling Data", function(t) {
 //			runProfilingTests(data, t);  
 //			t.end();
@@ -81,7 +81,7 @@ monitor.on('initialized', function() {
 });
 
 monitor.on('eventloop', function(data) {
-	if (completedTests.eventloop != true) {
+	if (completedTests.eventloop !== true) {
 		tap.test('Eventloop Data', function(t){
 			runEventLoopTests(data, t);
 			t.end();
@@ -188,7 +188,7 @@ function runGCTests(gcData, t) {
 		 'Pause duration is an integer');
 
 	for (var entry in gcData){
-		if (entry != 'type')
+		if (entry !== 'type')
 		  gcData[entry] = parseInt(gcData[entry]);
 	}
 
@@ -215,10 +215,10 @@ function runCommonEnvTests(commonEnvData, t) {
 	var ARCHS = ['x86', 'x86_64', 'ppc32', 'ppc64', 'ppc64le', 's390', 's390x'];
 	var OSES = ['AIX', 'Linux', 'Windows 7', 'Mac OS X'];
 
-	t.ok(ARCHS.indexOf(commonEnvData['os.arch']) != -1,
+	t.ok(ARCHS.indexOf(commonEnvData['os.arch']) !== -1,
 		 "Contains a recognised value for os.arch");
 
-	t.ok(OSES.indexOf(commonEnvData['os.name']) != -1,
+	t.ok(OSES.indexOf(commonEnvData['os.name']) !== -1,
 		 "Contains a recognised value for os.name");
 
 	t.match(commonEnvData['os.version'],/\S/,
@@ -273,7 +273,7 @@ function runNodeEnvTests(nodeEnvData, t) {
 	t.match((nodeEnvData['runtime.version']), /^v\d+.\d+.\d+/, 
 		 "Node version matches 'v99.99.99' format");
 
-	t.ok(['IBM SDK for Node.js', 'Node.js'].indexOf(nodeEnvData['runtime.name']) != -1,
+	t.ok(['IBM SDK for Node.js', 'Node.js'].indexOf(nodeEnvData['runtime.name']) !== -1,
 		 "Node runtime name is recognised");
 
 	if (nodeEnvData['runtime.vendor']) {
@@ -346,7 +346,7 @@ function runProfilingTests(profData, t){
 	//Parse values of all functions for next tests
 	for (var currentFunction in functions){
 		for (var entry in currentFunction){
-			if (entry != 'file' || entry != 'name')
+			if (entry !== 'file' || entry !== 'name')
 			currentFunction[entry] = parseInt(currentFunction[entry]);
 		}
 	}

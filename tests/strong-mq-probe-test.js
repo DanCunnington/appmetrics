@@ -58,7 +58,7 @@ process.on('exit', function(code) {
 	var sentreceivedpassed = true;
 	for (type in methodpairs) {
 		var methods = methodpairs[type];
-		if( messagecounts[methods.send] != messagecounts[methods.receive] ) {
+		if( messagecounts[methods.send] !== messagecounts[methods.receive] ) {
 			console.log('** Counts for ' + methods.send + " and " + methods.receive + ' did not match, sent '
 					+ messagecounts[methods.send] + ' received '
 					+ messagecounts[methods.receive]);
@@ -82,7 +82,7 @@ process.on('exit', function(code) {
 	for (pair in methodpairs) {
 		for( method in methodpairs[pair] ) {
 			var name = methodpairs[pair][method];
-			if( messagecounts[name] != eventcounts[name] ) {
+			if( messagecounts[name] !== eventcounts[name] ) {
 				console.log('** Counts for ' + name + " calls and " + name + ' events did not match, sent '
 						+ messagecounts[name] + ' received '
 						+ eventcounts[name]);
@@ -124,7 +124,7 @@ messagecounts[methodpairs.pushpull.receive] = 0;
 pull.subscribe(function(msg) {
 //	console.log('pull received: '+ msg);
 	messagecounts[methodpairs.pushpull.receive]++;
-	if( count == TESTCOUNT ) {
+	if( count === TESTCOUNT ) {
 		pull.close();
 		push.close();
 	}
@@ -143,7 +143,7 @@ messagecounts[methodpairs.pubsub.receive] = 0;
 sub.subscribe('pub.sub.test').on('message', function(msg) {
 //	console.log('sub received: '+ msg);
 	messagecounts[methodpairs.pubsub.receive]++;
-	if( count == TESTCOUNT ) {
+	if( count === TESTCOUNT ) {
 		pub.close();
 		sub.close();
 	}
@@ -159,7 +159,7 @@ messagecounts[methodpairs.pubsub.send] = 0;
 
 var intervalId = setInterval(function(){
 	count++;
-	if( count == TESTCOUNT ) {
+	if( count === TESTCOUNT ) {
 		clearInterval(intervalId);
 	}
 	push.publish(count);

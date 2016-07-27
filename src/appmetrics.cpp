@@ -111,8 +111,8 @@ static std::string portDirname(const std::string& filename) {
         return std::string(".");
     } else {
         std::size_t pos;
-        if (slashpos != std::string::npos) pos = slashpos;
-        else if (bslashpos != std::string::npos) pos = bslashpos;
+        if (slashpos !== std::string::npos) pos = slashpos;
+        else if (bslashpos !== std::string::npos) pos = bslashpos;
         else pos = (slashpos > bslashpos) ? slashpos : bslashpos;
         if (pos == 0) {
             return filename.substr(0, 1);
@@ -167,7 +167,7 @@ static bool loadProperties() {
     bool loaded = false;
 
     // Load from application directory, if possible
-    if (applicationDir != NULL) {
+    if (applicationDir !== NULL) {
         std::string propFilename(fileJoin(*applicationDir, std::string(PROPERTIES_FILE)));
         loaded = loaderApi->loadPropertiesFile(propFilename.c_str());
     } else {
@@ -181,7 +181,7 @@ static bool loadProperties() {
     }
 
     // Load from module directory
-    if (!loaded && appmetricsDir != NULL) {
+    if (!loaded && appmetricsDir !== NULL) {
         std::string propFilename(fileJoin(*appmetricsDir, std::string(PROPERTIES_FILE)));
         loaded = loaderApi->loadPropertiesFile(propFilename.c_str());
     }
@@ -255,7 +255,7 @@ static void* getMonitorApiFunction(std::string pluginPath, std::string functionN
 }
 
 static bool isMonitorApiValid() {
-    return (monitorApi::pushData != NULL) && (monitorApi::sendControl != NULL) && (monitorApi::registerListener != NULL);
+    return (monitorApi::pushData !== NULL) && (monitorApi::sendControl !== NULL) && (monitorApi::registerListener !== NULL);
 }
 
 static bool initMonitorApi() {
@@ -281,7 +281,7 @@ static bool initLoaderApi() {
         loaderApi = getLoaderCoreFunctions();
     }
 
-    return (loaderApi != NULL);
+    return (loaderApi !== NULL);
 }
 
 NAN_METHOD(start) {
@@ -327,11 +327,11 @@ static void freePayload(MessageData* payload) {
     if( NULL == payload ) {
         return;
     }
-    if( NULL != payload->data ) {
+    if( NULL !== payload->data ) {
         free(payload->data);
         payload->data = NULL;
     }
-    if( NULL != payload->source ) {
+    if( NULL !== payload->source ) {
         delete payload->source;
         payload->source = NULL;
     }
@@ -357,7 +357,7 @@ static void emitMessage(uv_async_t *handle, int status) {
 
     uv_mutex_unlock(messageListMutex);
 
-    while(currentMessage != NULL ) {
+    while(currentMessage !== NULL ) {
         TryCatch try_catch;
         const unsigned argc = 2;
         Local<Value> argv[argc];
@@ -410,7 +410,7 @@ static void sendData(const char* sourceId, unsigned int size, void *data) {
     // (So they are sent in the same order we added them.)
     uv_mutex_lock(messageListMutex);
     MessageData** tail = &messageList;
-    while( *tail != NULL ) {
+    while( *tail !== NULL ) {
         tail = &((*tail)->next);
     }
     (*tail) = payload;
