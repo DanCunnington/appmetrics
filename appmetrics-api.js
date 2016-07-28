@@ -88,7 +88,8 @@ function API(agent, appmetrics) {
      * UTC 2014 pid=4838 native.library.date=Oct 20 2014 10:51:56
      * number.of.processors=2
      * command.line=/home/exampleuser/sandbox/node-v0.10.32-linux-x64/bin/node
-     * /home/exampleuser/sandbox/node-v0.10.32-linux-x64/lib/node_modules/appmetrics/launcher.js
+     * /home/exampleuser/sandbox/node-v0.10.32-linux-x64/lib/
+     * node_modules/appmetrics/launcher.js
      * red.js
      */
     var values = message.split('\n');
@@ -108,7 +109,7 @@ function API(agent, appmetrics) {
   };
 
   var setEnv = function(env) {
-    for ( var p in env) {
+    for (var p in env) {
       that.environment[p] = env[p];
     }
   };
@@ -127,7 +128,7 @@ function API(agent, appmetrics) {
        * Checks for '=' sign on each line in order to ignore empty lines and
        * "#EnvironmentSource"
        */
-      if (value.indexOf('=') !=== -1) {
+      if (value.indexOf('=') !== -1) {
         var terms = value.split('=');
         result[terms[0]] = terms[1];
       }
@@ -142,7 +143,9 @@ function API(agent, appmetrics) {
   var formatMemory =
       function(message) {
         /*
-         * MemorySource,1415976582652,totalphysicalmemory=16725618688,physicalmemory=52428800,privatememory=374747136,virtualmemory=374747136,freephysicalmemory=1591525376
+         * MemorySource,1415976582652,totalphysicalmemory=16725618688,
+         * physicalmemory=52428800,privatememory=374747136,
+         * virtualmemory=374747136,freephysicalmemory=1591525376
          */
         var values = message.split(/[,=]+/);
         var physicalTotal = parseInt(values[3]);
@@ -164,12 +167,12 @@ function API(agent, appmetrics) {
 
   var formatGC = function(message) {
     /*
-     * gc_node : NodeGCData,1413903289280,S,48948480,13828320,7 , timestamp
-     * ,M|S, size , used , pause (ms)
-     * 
+     * gc_node : NodeGCData,1413903289280,S,48948480,13828320,7 ,
+     * timestamp     * ,M|S, size , used , pause (ms)
+     *
      * GC data can come in batches of multiple lines like the one in the
      * example, so first separate the lines, followed by the normal parsing.
-     * 
+     *
      */
     var lines = message.trim().split('\n');
     /* Split each line into the comma-separated values. */
@@ -219,7 +222,7 @@ function API(agent, appmetrics) {
 
     /*
      * loop_node: NodeLoopData,min,max,num,sum
-     * 
+     *
      */
     var lines = message.trim().split('\n');
     /* Split each line into the comma-separated values. */
@@ -234,7 +237,7 @@ function API(agent, appmetrics) {
       that.emit('loop', loop);
     });
 
-  }
+  };
 
   var formatApi = function(message) {
     var lines = message.trim().split('\n');
@@ -251,7 +254,7 @@ function API(agent, appmetrics) {
       // API events are passed by copy
       return;
     }
-    message = data.toString();
+    var message = data.toString();
     raiseEvent(topic, message);
   });
   // agent.sendControlCommand("history", "");

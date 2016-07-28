@@ -1,33 +1,32 @@
 /* *****************************************************************************
  * Copyright 2016 IBM Corp.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * Licensed under the Apache License, Version 2.0 (the 'License'); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * distributed under the License is distributed on an 'AS IS' BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
 
-var path = require("path")
-var module_dir = path.dirname(module.filename)
-var os = require("os")
+var path = require('path');
+var module_dir = path.dirname(module.filename);
 // var serializer = require('./lib/serializer.js');
 var aspect = require('./lib/aspect.js');
 var request = require('./lib/request.js');
 var fs = require('fs');
 
-var agent = require("./appmetrics")
+var agent = require('./appmetrics');
 // Set the plugin search path
-agent.spath(path.join(module_dir, "plugins"))
+agent.spath(path.join(module_dir, 'plugins'));
 agent.start();
 
-var hcAPI = require("./appmetrics-api.js");
+var hcAPI = require('./appmetrics-api.js');
 var jsonProfilingMode = false;
 
 /*
@@ -55,7 +54,7 @@ var latencyData = {
   min: 1 * 60 * 1000,
   max: 0,
   total: 0
-}
+};
 
 var latencyCheck = function() {
   var start = process.hrtime();
@@ -67,7 +66,7 @@ var latencyCheck = function() {
     latencyData.max = Math.max(latencyData.max, latency);
     latencyData.total = latencyData.total + latency;
   }, start);
-}
+};
 
 var latencyReport = function() {
   if (latencyData.count === 0)
@@ -77,7 +76,7 @@ var latencyReport = function() {
     max: latencyData.max,
     avg: latencyData.total / latencyData.count
   };
-  var avg = latencyData.total / latencyData.count;
+  // var avg = latencyData.total / latencyData.count;
   exports.emit('eventloop', {
     time: Date.now(),
     latency: latency
@@ -86,7 +85,7 @@ var latencyReport = function() {
   latencyData.min = 1 * 60 * 1000;
   latencyData.max = 0;
   latencyData.total = 0;
-}
+};
 
 var latencyCheckInterval = 500;
 var latencyReportInterval = 5000;
@@ -102,7 +101,7 @@ latencyReportLoop.unref();
  */
 var data = {};
 
-aspect.after(module.__proto__, 'require', data, function(
+aspect.after(module.prototype, 'require', data, function(
     obj, methodName, args, context, ret) {
   if (ret === null || ret.__ddProbeAttached__) {
     return ret;
@@ -130,7 +129,7 @@ module.exports.enable =
       switch (data) {
         case 'profiling':
           agent.sendControlCommand(
-              "profiling_node", "on,profiling_node_subsystem");
+              'profiling_node', 'on,profiling_node_subsystem');
           break;
         case 'requests':
           probes.forEach(function(probe) {
@@ -172,7 +171,7 @@ module.exports.disable =
       switch (data) {
         case 'profiling':
           agent.sendControlCommand(
-              "profiling_node", "off,profiling_node_subsystem");
+              'profiling_node', 'off,profiling_node_subsystem');
           break;
         case 'requests':
           probes.forEach(function(probe) {
@@ -212,7 +211,7 @@ module.exports.setConfig = function(data, config) {
               probe.disableRequests();
             }
           });
-        })
+        });
       }
       break;
     default:
@@ -225,9 +224,9 @@ module.exports.setConfig = function(data, config) {
 };
 
 // Export any functions exported by the agent
-for ( var prop in agent) {
-  if (typeof agent[prop] === "function") {
-    module.exports[prop] = agent[prop]
+for (var prop in agent) {
+  if (typeof agent[prop] === 'function') {
+    module.exports[prop] = agent[prop];
   }
 }
 
@@ -240,7 +239,8 @@ module.exports.emit =
       }
       // Publish data that can be visualised in Health Center
       if ((topic === 'http')
-          || (topic === 'mqlight') || (topic === 'mongo') || (topic === 'mysql')) {
+          || (topic === 'mqlight') || (topic === 'mongo')
+          || (topic === 'mysql')) {
         data = JSON.stringify(data);
         agent.nativeEmit(topic, String(data));
       }
@@ -273,8 +273,8 @@ module.exports.transactionLink = function(linkName, callback) {
 
 module.exports.setJSONProfilingMode = function(val) {
   jsonProfilingMode = val;
-}
+};
 
 module.exports.getJSONProfilingMode = function() {
   return jsonProfilingMode;
-}
+};
