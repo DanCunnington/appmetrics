@@ -136,7 +136,7 @@ size_t GuessSpaceSizeFromArgs(std::string argName) {
 			if (arg[0] == '-' && arg[1] == '-') {
 				unsigned int idx;
 				for (idx=2; idx < argName.length() && idx < arg.length(); idx++) {
-					if (argName[idx] !== arg[idx]) {
+					if (argName[idx] != arg[idx]) {
 						if (!(argName[idx] == '-' && arg[idx] == '_')) {
 							break;
 						}
@@ -162,7 +162,7 @@ static size_t GuessDefaultMaxSemiSpaceSize() {
 
 static size_t Align(size_t value, int alignment) {
 	size_t result = value;
-	if (value % alignment !== 0) {
+	if (value % alignment != 0) {
 		result = (1 + (value / alignment)) * alignment;
 	}
 	return result;
@@ -217,7 +217,7 @@ static void GetNodeInformation(uv_async_t *async, int status) {
 	Nan::HandleScope scope;
 	plugin::nodeVersion = GetNodeVersion();
 	plugin::nodeTag = GetNodeTag();
-	if (plugin::nodeTag.find("IBMBuild") !== std::string::npos) {
+	if (plugin::nodeTag.find("IBMBuild") != std::string::npos) {
 		plugin::nodeVendor = std::string("IBM");
 		plugin::nodeName = std::string("IBM SDK for Node.js");
 	} else {
@@ -232,12 +232,12 @@ static void GetNodeInformation(uv_async_t *async, int status) {
 	plugin::heapSizeLimit = hs.heap_size_limit();
 	uv_close((uv_handle_t*) async, cleanupHandle);
 	
-	if (plugin::nodeVersion !== "") {
+	if (plugin::nodeVersion != "") {
 		std::stringstream contentss;
 		contentss << "#EnvironmentSource\n";
 
 		contentss << "runtime.version=" << plugin::nodeVersion;
-		if (plugin::nodeTag !== "") {
+		if (plugin::nodeTag != "") {
 			contentss << plugin::nodeTag;
 		}
 		contentss << '\n';
@@ -245,10 +245,10 @@ static void GetNodeInformation(uv_async_t *async, int status) {
 		contentss << "appmetrics.version=" << plugin::api.getProperty("appmetrics.version") << '\n'; // eg "1.0.4"
 		contentss << "agentcore.version=" << std::string(plugin::api.getProperty("agent.version")) << '\n'; // eg "3.0.7"
 
-		if (plugin::nodeVendor !== "") {
+		if (plugin::nodeVendor != "") {
 			contentss << "runtime.vendor=" << plugin::nodeVendor << '\n';
 		}
-		if (plugin::nodeName !== "") {
+		if (plugin::nodeName != "") {
 			contentss << "runtime.name=" << plugin::nodeName << '\n';
 		}
 

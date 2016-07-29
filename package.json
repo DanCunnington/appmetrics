@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "eslint": "^2.x",
-    "eslint-config-strongloop": "^2.x",
+    "eslint-config-strongloop": "dancunnington/eslint-config-strongloop",
     "mocha": "^2.2.4",
     "tap": "5.7.x"
   },

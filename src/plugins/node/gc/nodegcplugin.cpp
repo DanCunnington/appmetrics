@@ -111,7 +111,7 @@ static bool GetSteadyTime(LARGE_INTEGER* pcount) {
 		freqInitialized = TRUE;
 	}
 	BOOL rc = QueryPerformanceCounter(pcount);
-	return rc !== 0;
+	return rc != 0;
 }
 static uint64 CalculateDuration(LARGE_INTEGER start, LARGE_INTEGER finish) {
 	if (!freqInitialized) return 0L;
