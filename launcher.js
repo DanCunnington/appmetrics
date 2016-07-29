@@ -53,7 +53,7 @@ if (process.argv.length > 1) {
   /* Mock the main module for the benefit of
   the agent (just the bit it needs) */
   process.mainModule = {
-    'filename': require.resolve(process.argv[1])
+    filename: require.resolve(process.argv[1])
   };
 }
 var agent = require(agent_module);
